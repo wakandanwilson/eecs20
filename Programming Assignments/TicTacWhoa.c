@@ -7,21 +7,22 @@ bool gameWon(char board[SIZE][SIZE], char player);
 bool isBoardFull(char board[SIZE][SIZE]);
 void initializeBoard(char board[SIZE][SIZE]);
 void playerInput(char *row, int *col);
-
-
-//initialize Plyaer 1 and 2 input to empty string of length 2
-char p1input[2];
-char p2input[2];
+void updateMove();
+void printBoard();
 
 bool gameWon(char board[SIZE][SIZE], char player){
-    //check diagonals
-    //check each row
+    //check each row and column
     for (int i = 0; i < SIZE; i++){
-        if (board[0][i] != '_'){
-            
+        if ((board[i][0] == player && board[i][1] == player && board[i][2] == player) || (board[0][i] == player && board[1][i] == player && board[2][i] == player)){
+            return true;
         }
     }
-    //check each column
+    //check diagonals
+    if ((board[0][0] == player && board[1][1] == player && board[2][2] == player) || (board[3][1] == player && board[2][2] == player && board[1][3])){
+        return true;
+    }
+
+    return false;
 }
 
 void playerInput(int *row, char *col){ //points to value in address to directly modify
@@ -67,8 +68,13 @@ int main(void){
     };
     initializeBoard(board);
 
+    char player = 'X'; //X is 1, O is 2
+
     //while loop
-    while (/*gameWon == false and isBoardFull == false*/true){
+    while (gameWon == false && isBoardFull == false){
+        
+        gameWon(board[SIZE][SIZE], player);
+        isBoardFull(board[SIZE][SIZE]);
         //run game
 
         //get player input
@@ -78,10 +84,7 @@ int main(void){
     }
 
     //check if board is full
-    if (isBoardFull){
-        printf("Board is full. Game over.");
-        return 0;
-    }
+
 
 
 
