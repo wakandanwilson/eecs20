@@ -7,8 +7,12 @@ bool gameWon(char board[SIZE][SIZE], char player);
 bool isBoardFull(char board[SIZE][SIZE]);
 void initializeBoard(char board[SIZE][SIZE]);
 void playerInput(char *row, int *col);
-void updateMove();
-void printBoard();
+void updateMove(char board[SIZE][SIZE], char row, int col, char player);
+//void printBoard();
+
+void updateMove(char board[SIZE][SIZE], char row, int col, char player){
+    board[row][col] = player;
+}
 
 bool gameWon(char board[SIZE][SIZE], char player){
     //check each row and column
@@ -72,21 +76,17 @@ int main(void){
 
     //while loop
     while (gameWon == false && isBoardFull == false){
-        
+
         gameWon(board[SIZE][SIZE], player);
         isBoardFull(board[SIZE][SIZE]);
         //run game
 
         //get player input
-        int row;
+        int row; //initialize row, col
         char col;
         playerInput(&row, &col); //pass memory address as parameter
     }
 
     //check if board is full
-
-
-
-
     return 0;
 }
