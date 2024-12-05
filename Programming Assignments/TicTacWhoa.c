@@ -110,11 +110,8 @@ int main(void){
     char currentPlayer = 'X'; //X is 1, O is 2
     bool gameEnd = false;
 
-    //while loop game no end boardFull
+    //while loop game no end
     while (gameEnd == false){
-
-        gameWon(board, currentPlayer);
-        isBoardFull(board);
         //run game
 
         //get player input
@@ -131,14 +128,27 @@ int main(void){
             updateMove(board, rowIndex, colIndex, currentPlayer);
             if (gameWon(board, currentPlayer)){
                 gameEnd = true;
+                printCurrentBoard(board);
+                printf("Player %c wins\n", currentPlayer);
             }
-            printCurrentBoard(board);
+            else if (isBoardFull(board)){
+                gameEnd = true;
+                printCurrentBoard(board);
+                printf("Board is full.\n");
+            }
+            else{
+                if (currentPlayer == 'X'){
+                    currentPlayer = 'O';
+                }
+                else if (currentPlayer == 'O'){
+                    currentPlayer = 'X';
+                }
+            }
         }
         else if(!isMoveValid){
             printf("Invalid move, please specify both column and row.");
         }
     }
 
-    //check if board is full
     return 0;
 }
