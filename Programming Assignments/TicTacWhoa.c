@@ -6,10 +6,10 @@
 
 bool gameWon(char board[SIZE][SIZE], char player);
 bool isBoardFull(char board[SIZE][SIZE]);
-bool isMoveValid(int row, char col, char player);
+bool isMoveValid(int row, char col);
 void initializeBoard(char board[SIZE][SIZE]);
 void playerInput(int *row, char *col);
-void updateMove(char board[SIZE][SIZE], int row, char col, char player);
+void updateMove(char board[SIZE][SIZE], int row, int col, char player);
 void printCurrentBoard(char board[SIZE][SIZE]);
 
 
@@ -145,7 +145,7 @@ int main(void){
                 }
             }
         }
-        else if(!isMoveValid){
+        else if(!isMoveValid(rowIndex,col)){
             printf("Invalid move, please specify both column and row.");
         }
     }
