@@ -16,8 +16,8 @@ void printCurrentBoard(char board[SIZE][SIZE]);
 //check if player input is valid 
 bool isMoveValid(int row, char col, char board[SIZE][SIZE]){
     if ((col >= 'A' && col <= 'C') && (row >= 1 && row <= 3)) {
-        int rowIndex = 3 - row; // Convert user input to board index
-        int colIndex = col - 'A'; // Convert column letter to index
+        int rowIndex = 3 - row; //convert to board index
+        int colIndex = col - 'A';
         if (board[rowIndex][colIndex] == '_' || board[rowIndex][colIndex] == ' ') {
             return true;
         }
