@@ -13,7 +13,6 @@ void playerInput(char input[]);
 void updateMove(char board[SIZE][SIZE], int row, int col, char player);
 void printCurrentBoard(char board[SIZE][SIZE]);
 
-
 //check if player input is valid 
 bool isMoveValid(int row, char col, char board[SIZE][SIZE]){
     if ((col >= 'A' && col <= 'C') && (row >= 1 && row <= 3)) {
@@ -35,7 +34,10 @@ void printCurrentBoard(char board[SIZE][SIZE]){
                 printf("_%c_", board[i][j]);
             }
             if (i == 2){
-                printf(" %c ", board[i][j]);
+                if (board[i][j] == '_')
+                    printf("   ");
+                else
+                    printf(" %c ", board[i][j]);
             }
             if (j < 2){
                 printf("|");
@@ -90,6 +92,7 @@ void initializeBoard(char board[SIZE][SIZE]){
     for (int i = 0; i < 3; i++){ //rows
         printf("%d ", 3-i);
         for (int j = 0; j < 3; j++){ //columns
+            board[i][j] = '_';
             if (i < 2){
                 printf("___");
             }
@@ -132,6 +135,10 @@ int main(void){
         }
         playerInput(input);
 
+        //initialize col and row values
+        char col;
+        int row;
+
         //check for new game or quit
         if (strcmp(input, "NEW") == 0){ //checks if ASCII values of input and NEW are the same
             printf("New game.\n");
@@ -143,10 +150,6 @@ int main(void){
             printf("Quitting game.\n");
             break;
         }
-
-        //initialize col and row values
-        char col;
-        int row;
 
         if (sscanf(input, "%c%d", &col, &row) == 2){ //reads and parses string from input, checks to see if string is 2 chars
             //converts row and col to indices
