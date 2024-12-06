@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 
 //const int 3 (3x3 matrix)
 #define SIZE 3
@@ -8,7 +9,7 @@ bool gameWon(char board[SIZE][SIZE], char player);
 bool isBoardFull(char board[SIZE][SIZE]);
 bool isMoveValid(int row, char col, char board[SIZE][SIZE]);
 void initializeBoard(char board[SIZE][SIZE]);
-void playerInput(int *row, char *col);
+void playerInput(char input[]);
 void updateMove(char board[SIZE][SIZE], int row, int col, char player);
 void printCurrentBoard(char board[SIZE][SIZE]);
 
@@ -67,8 +68,9 @@ bool gameWon(char board[SIZE][SIZE], char player){
 }
 
 //get player input, update row and col
-void playerInput(int *row, char *col){ //points to value in address to directly modify
-    scanf(" %c%d", col, row);
+void playerInput(char input[]){ //accepts input array as arg, input stores player's input
+    fgets(input, 6, stdin); //longest string: Q U I T \n \0
+    input[strcspn(input, "\n")] = '\0'; //finds first index where \n and changes to null terminator
 }
 
 //check if board is full (return true if board is full)
@@ -113,46 +115,73 @@ int main(void){
     initializeBoard(board);
 
     char currentPlayer = 'X'; //X is 1, O is 2
+    int playerNum[2] = {1,2};
     bool gameEnd = false;
 
     //while loop game no end
     while (gameEnd == false && isBoardFull(board) == false){
-        //print board each time
+
+        char input[6]; //set 6 memory spaces for input
 
         //get player input
-        int row; //initialize row, col
-        char col;
-        printf("Player %c's move: ", currentPlayer);
-        playerInput(&row, &col); //pass memory address as parameter
-
-        //convert input into indices
-        int rowIndex = 3 - row;
-        int colIndex = col - 'A';
-
-        if (isMoveValid(row,col,board)){
-            updateMove(board, rowIndex, colIndex, currentPlayer);
-            if (gameWon(board, currentPlayer)){
-                gameEnd = true;
-                printCurrentBoard(board);
-                printf("Player %c wins\n", currentPlayer);
-            }
-            else{
-                if (currentPlayer == 'X'){
-                    currentPlayer = 'O';
-                }
-                else if (currentPlayer == 'O'){
-                    currentPlayer = 'X';
-                }
-                printCurrentBoard(board);
-            }
+        if (currentPlayer == 'X'){
+            printf("Player %d's move (NEW for new game, QUIT to quit): ", playerNum[0]);
         }
         else {
-            printf("Invalid move. Try again\n");
+            printf("Player %d's move (NEW for new game, QUIT to quit): ", playerNum[1]);
+        }
+        playerInput(input);
+
+        //check for new game or quit
+        if (strcmp(input, "NEW") == 0){ //checks if ASCII values of input and NEW are the same
+            printf("New game.\n");
+            initializeBoard(board);
+            currentPlayer = 'X';
+            continue;
+        }
+        else if (strcmp(input, "QUIT") == 0){
+            printf("Quitting game.\n");
+            break;
+        }
+
+        //initialize col and row values
+        char col;
+        int row;
+
+        if (sscanf(input, "%c%d", &col, &row) == 2){ //reads and parses string from input, checks to see if string is 2 chars
+            //converts row and col to indices
+            int rowIndex = 3 - row;
+            int colIndex = col - 'A';
+
+            if (isMoveValid(row,col,board)){
+                updateMove(board, rowIndex, colIndex, currentPlayer);
+                if (gameWon(board, currentPlayer)){
+                    gameEnd = true;
+                    printCurrentBoard(board);
+                    if (currentPlayer == 'X'){
+                        printf("Player %d wins\n", playerNum[0]);
+                    }
+                    else {
+                        printf("Player %d wins\n", playerNum[1]);
+                    }
+                }
+                else{
+                    if (currentPlayer == 'X'){
+                        currentPlayer = 'O';
+                    }
+                    else if (currentPlayer == 'O'){
+                        currentPlayer = 'X';
+                    }
+                    printCurrentBoard(board);
+                }
+            }
+            else {
+                printf("Invalid move. Try again\n");
+            }
         }
         if (isBoardFull(board)){
-        printf("Board is full.");
+            printf("Board is full.");
         }
     }
-
     return 0;
 }
